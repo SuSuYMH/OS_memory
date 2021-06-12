@@ -176,7 +176,7 @@ int MainWindow:: Recycle(JinCheng& JC)//根据之前用户传进来的NUM，找�
     {
         if (KongLian[i].end == JC.start)//上面有空
         {
-            if (xia_kong == 0)//上有空下没空
+          if (xia_kong == -1)//上有空下没空
             {
                 KongLian[i].end = JC.end;
                 KongLian[i].length += JC.len;
