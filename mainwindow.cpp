@@ -53,6 +53,10 @@ void MainWindow::remove()
                          Recycle(Ing[i]);
                      }
                  }
+     QString str_run=QString::number(Ing.size());
+     QString str_gua=QString::number(Gua.size());
+     QString str_num="Number of currently running jobs:"+str_run+"        Number of currently blocked jobs:"+str_gua;
+     ui->listWidget->insertItem(0,str_num);
      for (int i = 0; i < KongLian.size(); i++)
      {
          /*result.sprintf("长度为%d          起始地址为%d         终止地址为%d\n",KongLian[i].length,KongLian[i].start,KongLian[i].end);
@@ -65,7 +69,7 @@ void MainWindow::remove()
          QString str="current block"+str4+"     Free block size:"+str1+"     start address:"+str2+"     end address:"+str3;
          ui->listWidget->insertItem(i,str);
      }
-      ui->comboBox->clear();
+       ui->comboBox->clear();//先删除下拉框
      for (int i = 0; i < Ing.size(); i++)//更新删除下拉框
      {
          ui->comboBox->addItem(QString::number(Ing[i].NUM));
@@ -78,7 +82,11 @@ void MainWindow::add()
    JinCheng CurrentJinCheng;
    CurrentJinCheng.len=ui->lineEdit->text().toInt();
    CurrentJinCheng.NUM = num++;//进程号
-   FF(CurrentJinCheng);
+   FF(CurrentJinCheng,0);
+   QString str_run=QString::number(Ing.size());
+   QString str_gua=QString::number(Gua.size());
+   QString str_num="Number of currently running jobs:"+str_run+"        Number of currently blocked jobs:"+str_gua;
+   ui->listWidget->insertItem(0,str_num);
    for (int i = 0; i < KongLian.size(); i++)
    {
        /*result.sprintf("长度为%d          起始地址为%d         终止地址为%d\n",KongLian[i].length,KongLian[i].start,KongLian[i].end);
@@ -91,7 +99,7 @@ void MainWindow::add()
        QString str="current block"+str4+"     Free block size:"+str1+"     start address:"+str2+"     end address:"+str3;
        ui->listWidget->insertItem(i,str);
    }
-     ui->comboBox->clear();
+     ui->comboBox->clear();//先删除下拉框
    for (int i = 0; i < Ing.size(); i++)//更新删除下拉框
    {
        ui->comboBox->addItem(QString::number(Ing[i].NUM));
@@ -119,7 +127,7 @@ void MainWindow::Sort()
     }
 }
 
-int MainWindow::FF(JinCheng & JC)//JC为分配的进程
+int MainWindow::FF(JinCheng & JC,bool AlreadyGua)//JC为分配的进程
 {
     bool Success = 0;//分配是否成功，没成功则挂到Gua中等待
     for (int i = 0; i < KongLian.size(); i++)
@@ -145,11 +153,23 @@ int MainWindow::FF(JinCheng & JC)//JC为分配的进程
     }
     if (Success == false)//没成功分配挂上去
     {
-        Gua.push_back(JC);
+        if (AlreadyGua == 0)//如果之前就已经挂载的就不要管它了，不然就这样
+                {
+                    Gua.push_back(JC);
+                }
     }
     else//成功运行的
     {
-        Ing.push_back(JC);
+        if (AlreadyGua == 0)
+                {
+                    Ing.push_back(JC);
+                }
+                else
+                {
+                    Ing.push_back(JC);
+                    JC = Gua.back();
+                    Gua.pop_back();
+                }
     }
     Sort();
     //sort(KongLian.begin(), KongLian.end(), length);//把KongNode按照length的大小进行排序，每次分配或者回收之后都要进行排序，PS：之后可以把它抽象成一个函数来解决
@@ -204,7 +224,7 @@ int MainWindow:: Recycle(JinCheng& JC)//根据之前用户传进来的NUM，找�
     //sort(KongLian.begin(), KongLian.end(), start);//把KongNode按照指针顺序排序
     for (int i = 0; i < Gua.size(); i++)
     {
-        FF(Gua[i]);//看看这些被挂载的玩意能不能运行了啦！
+        FF(Gua[i],1);//看看这些被挂载的玩意能不能运行了啦！
     }
     return 0;
 }

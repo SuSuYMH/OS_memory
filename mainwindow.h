@@ -30,19 +30,20 @@ public:
         int len;//进程所需长度
         int start;
         int end;
+        bool AlreadyGua=0;
     };
 
-    int Solution;
+    int Solution;//选择算法
     int num;
    std:: vector<KongNode> KongLian;//空闲链
    std::  vector<JinCheng> Gua;//等待进程
    std:: vector<JinCheng> Ing;//正在进行的进程
 
-   void Sort();
+   void Sort();//加入或移除任务后，按哪种方式对空闲块进行排序
    void add();
    void remove();
    void choose();
-   int FF(JinCheng& JC);
+   int FF(JinCheng& JC,bool AlreadyGua);
    int Recycle(JinCheng& JC);
   static  bool  length(const KongNode& a, const KongNode& b) ;//按长度给空闲分区排序
    static bool  start(const KongNode& a, const KongNode& b);//按起始地址给空闲分区排序
