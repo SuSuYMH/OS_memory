@@ -12,8 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     num=0;
     KongNode init = { 0,640,640 };
     KongLian.push_back(init);
-     ui->choosebox->addItem("First Fit algorithm");
-      ui->choosebox->addItem("Best Fit algorithm");
+    ui->choosebox->addItem("First Fit algorithm");
+    ui->choosebox->addItem("Best Fit algorithm");
     connect(ui->DemandBT,&QPushButton::clicked,this,&MainWindow::add);
     connect(ui->RecycleBT,&QPushButton::clicked,this,&MainWindow::remove);
     connect(ui->ChooseBT,&QPushButton::clicked,this,&MainWindow::choose);
@@ -39,6 +39,12 @@ void  MainWindow::choose()
      }
       ui->comboBox->clear();//清空目前所有
       ui->listWidget->clear();
+      Ing.clear();
+      Gua.clear();
+      KongLian.clear();
+      num=0;
+      KongNode init = { 0,640,640 };
+      KongLian.push_back(init);
 }
 
 void MainWindow::remove()
@@ -105,6 +111,7 @@ void MainWindow::add()
        ui->comboBox->addItem(QString::number(Ing[i].NUM));
    }
 }
+
 bool MainWindow:: length(const KongNode& a, const KongNode& b) //按长度排序
 {
     return a.length < b.length;

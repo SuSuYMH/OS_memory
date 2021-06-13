@@ -30,7 +30,6 @@ public:
         int len;//进程所需长度
         int start;
         int end;
-        bool AlreadyGua=0;
     };
 
     int Solution;//选择算法

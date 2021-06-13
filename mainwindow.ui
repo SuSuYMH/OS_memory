@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>操作系统动态分区</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="widget_3" native="true">
